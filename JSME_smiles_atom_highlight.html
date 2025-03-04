@@ -4,35 +4,43 @@
     <script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
     <style>
         body {
-            background-color: #000; /* 设置黑色背景以突出白色字体 */
-            color: #fff; /* 将所有字体改为白色 */
-            margin: 0; /* 移除默认边距，确保全屏 */
+            background-color: transparent;
+            color: #fff; 
+            margin: 0; 
             padding: 0;
-            height: 100vh; /* 确保 body 占满视口高度 */
+            height: 100vh; 
             display: flex;
-            flex-direction: column; /* 垂直排列，SMILES 在上，画板在下 */
+            flex-direction: column; 
         }
         em {
-            background-color: rgb(102, 255, 255); /* 高亮颜色保持不变 */
+            background-color: rgb(102, 255, 255); 
         }
         #smiles_container {
-            font-weight: bold; /* 加粗 SMILES 文字 */
-            padding: 10px; /* 添加一些内边距 */
-            text-align: center; /* 居中显示 SMILES */
+            font-weight: bold; 
+            padding: 10px; 
+            text-align: center; 
+            background-color: rgba(173, 216, 230, 0.3);
+            border: 1px solid #add8e6;
+            border-radius: 5px; 
+            display: inline-block; 
+            min-width: 200px; 
+            margin: 0 auto; 
         }
         #jsme_container {
-            flex-grow: 1; /* 画板占据剩余空间，实现全屏效果 */
-            width: 100%; /* 宽度占满 */
-            height: 100%; /* 高度占满剩余空间 */
+            flex-grow: 1; 
+            width: 100%; 
+            height: 100%; 
         }
         form {
-            text-align: center; /* 复选框居中 */
+            text-align: center;
             padding: 5px;
+        }
+        input[type="checkbox"] + label {
+            font-size: 12px; 
         }
     </style>
 
     <script>
-        // JSME 加载后调用此函数
         function jsmeOnLoad() {
             jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "100%", {
                 "options": "oldlook,marker,markAtomOnly,nocanonize"
@@ -40,9 +48,9 @@
             jsmeApplet.setCallBack("AfterStructureModified", show_smiles);
         }
 
-        var patt = /\[([A-Za-z][a-z]?)H?\d*:\d+\]/g; // 正则表达式匹配原子编号
+        var patt = /\[([A-Za-z][a-z]?)H?\d*:\d+\]/g; 
         function show_smiles(event) {
-            smiles = event.src.smiles(); // 获取 SMILES
+            smiles = event.src.smiles(); 
             new_smiles = smiles.replace(patt, '<em>$1</em>');
             document.getElementById("smiles_container").innerHTML = new_smiles;
         }
@@ -50,14 +58,13 @@
 </head>
 
 <body>
-    <!-- SMILES 显示在画板上方 -->
-    <div>
+    <div style="text-align: center;">
         SMILES: <span id="smiles_container"></span>
     </div>
     <form>
-        <input type="checkbox" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>Canonical SMILES
+        <input type="checkbox" id="canonical" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>
+        <label for="canonical">Canonical SMILES</label>
     </form>
-    <!-- 画板全屏 -->
     <div id="jsme_container"></div>
 </body>
 </html>
