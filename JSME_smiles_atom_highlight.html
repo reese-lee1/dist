@@ -1,45 +1,63 @@
 <html>
-
 <head>
     <title>Show SMILES with atom highlight</title>
     <script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
     <style>
+        body {
+            background-color: #000; /* 设置黑色背景以突出白色字体 */
+            color: #fff; /* 将所有字体改为白色 */
+            margin: 0; /* 移除默认边距，确保全屏 */
+            padding: 0;
+            height: 100vh; /* 确保 body 占满视口高度 */
+            display: flex;
+            flex-direction: column; /* 垂直排列，SMILES 在上，画板在下 */
+        }
         em {
-            background-color: rgb(102, 255, 255);
+            background-color: rgb(102, 255, 255); /* 高亮颜色保持不变 */
+        }
+        #smiles_container {
+            font-weight: bold; /* 加粗 SMILES 文字 */
+            padding: 10px; /* 添加一些内边距 */
+            text-align: center; /* 居中显示 SMILES */
+        }
+        #jsme_container {
+            flex-grow: 1; /* 画板占据剩余空间，实现全屏效果 */
+            width: 100%; /* 宽度占满 */
+            height: 100%; /* 高度占满剩余空间 */
+        }
+        form {
+            text-align: center; /* 复选框居中 */
+            padding: 5px;
         }
     </style>
 
     <script>
-        //this function will be called after the JavaScriptApplet code has been loaded.
+        // JSME 加载后调用此函数
         function jsmeOnLoad() {
-
-            jsmeApplet = new JSApplet.JSME("jsme_container", "380px", "340px", {
+            jsmeApplet = new JSApplet.JSME("jsme_container", "100%", "100%", {
                 "options": "oldlook,marker,markAtomOnly,nocanonize"
             });
-
             jsmeApplet.setCallBack("AfterStructureModified", show_smiles);
-            //jsmeApplet.setNotifyStructuralChangeJSfunction("show_smiles");
         }
 
-        var patt = /\[([A-Za-z][a-z]?)H?\d*:\d+\]/g; //regexp pattern for numbered atom
+        var patt = /\[([A-Za-z][a-z]?)H?\d*:\d+\]/g; // 正则表达式匹配原子编号
         function show_smiles(event) {
-            smiles = event.src.smiles(); //atom that are colored are numbered
+            smiles = event.src.smiles(); // 获取 SMILES
             new_smiles = smiles.replace(patt, '<em>$1</em>');
-            document.getElementById("smiles_container").innerHTML = new_smiles
+            document.getElementById("smiles_container").innerHTML = new_smiles;
         }
-
-
     </script>
 </head>
 
 <body>
-<div id="jsme_container"></div>
-<form>
-    <input type="checkbox" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})' >Canonical SMILES
-</form>
-<BR>
-SMILES: <b><span id="smiles_container"></span></b>
-
+    <!-- SMILES 显示在画板上方 -->
+    <div>
+        SMILES: <span id="smiles_container"></span>
+    </div>
+    <form>
+        <input type="checkbox" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>Canonical SMILES
+    </form>
+    <!-- 画板全屏 -->
+    <div id="jsme_container"></div>
 </body>
 </html>
-
