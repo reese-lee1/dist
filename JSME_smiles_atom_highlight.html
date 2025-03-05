@@ -16,12 +16,12 @@
             background-color: rgb(102, 255, 255); 
         }
         #smiles_container {
-            font-weight: bold;
-            padding: 10px; 
+            font-weight: normal;
+            padding: 8px; 
             text-align: center; 
             background-color: transparent; 
             border: 1px solid #add8e6; 
-            border-radius: 5px; 
+            border-radius: 1px; 
             display: block; 
             width: 100%; 
             box-sizing: border-box; 
@@ -59,7 +59,7 @@
 
 <body>
     <div style="text-align: center;">
-        SMILES: <span id="smiles_container"></span>
+        <strong>SMILES: </strong> <span id="smiles_container"></span>
     </div>
     <form>
         <input type="checkbox" id="canonical" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>
