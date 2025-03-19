@@ -82,8 +82,7 @@
         function cutSmiles() {
             const smilesContainer = document.getElementById("smiles_container");
             const smilesText = smilesContainer.innerText || smilesContainer.textContent;
-
-            // 发送 SMILES 到父窗口
+            console.log("Sending SMILES to parent:", smilesText); // 调试日志
             window.parent.postMessage({ type: "cutSmiles", smiles: smilesText }, "*");
             smilesContainer.innerHTML = ""; // 清空 SMILES 框
         }
