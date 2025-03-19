@@ -25,7 +25,7 @@
             width: 94%; 
             margin: 0 auto;
             box-sizing: border-box;
-            display: inline-block;
+            display: inline-block; /* 改为inline-block以适应按钮 */
             vertical-align: middle;
         }
         #smiles_wrapper {
@@ -49,17 +49,17 @@
         input[type="checkbox"] + label {
             font-size: 12px; 
         }
-        #copyButton {
+        #cutButton {
             background-color: #FFA500;
             border: none;
             padding: 6px 10px;
             cursor: pointer;
-            border-radius: 3px 0 0 3px;
-            margin-right: -1.5px;
+            border-radius: 3px 0 0 3px; /* 左边圆角，与框连接 */
+            margin-right: -1.5px; /* 贴近SMILES框 */
             color: white;
             font-weight: bold;
         }
-        #copyButton:hover {
+        #cutButton:hover {
             background-color: #ff8c00;
         }
     </style>
@@ -79,26 +79,14 @@
             document.getElementById("smiles_container").innerHTML = new_smiles;
         }
 
-        function copySmiles() {
+        function cutSmiles() {
             const smilesContainer = document.getElementById("smiles_container");
-            const smilesText = smilesContainer.innerText || smilesContainer.textContent;
-
-            // 尝试使用 Clipboard API
+            const smilesText = smilesContainer.innerText || smilesContainer.textContent; // 获取纯文本
             navigator.clipboard.writeText(smilesText).then(() => {
-                alert("SMILES已复制到剪贴板！");
+                smilesContainer.innerHTML = ""; // 清空SMILES框
+                alert("SMILES已剪切到剪贴板！"); // 提示用户
             }).catch(err => {
-                // 如果 Clipboard API 失败，使用 execCommand 作为备用
-                try {
-                    const textarea = document.createElement("textarea");
-                    textarea.value = smilesText;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand("copy");
-                    document.body.removeChild(textarea);
-                    alert("SMILES已复制到剪贴板（使用备用方法）！");
-                } catch (fallbackErr) {
-                    alert("复制失败，请手动复制: " + smilesText);
-                }
+                alert("剪切失败，请手动复制: " + err);
             });
         }
     </script>
@@ -107,7 +95,7 @@
 <body>
     <div id="smiles_wrapper">
         <strong>SMILES: </strong>
-        <button id="copyButton" onclick="copySmiles()" title="复制SMILES到剪贴板">✂</button>
+        <button id="cutButton" onclick="cutSmiles()" title="剪切SMILES到剪贴板">✂</button>
         <span id="smiles_container"></span>
     </div>
     <form>
