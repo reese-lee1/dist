@@ -21,11 +21,19 @@
             text-align: center; 
             background-color: transparent; 
             border: 1.5px solid #FFA500; 
-            border-radius: 1px; 
-            display: block; 
+            border-radius: 1px;
             width: 94%; 
             margin: 0 auto;
-            box-sizing: border-box; 
+            box-sizing: border-box;
+            display: inline-block; /* 改为inline-block以适应按钮 */
+            vertical-align: middle;
+        }
+        #smiles_wrapper {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 0;
         }
         #jsme_container {
             flex-grow: 1; 
@@ -40,6 +48,19 @@
         }
         input[type="checkbox"] + label {
             font-size: 12px; 
+        }
+        #cutButton {
+            background-color: #FFA500;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 3px 0 0 3px; /* 左边圆角，与框连接 */
+            margin-right: -1.5px; /* 贴近SMILES框 */
+            color: white;
+            font-weight: bold;
+        }
+        #cutButton:hover {
+            background-color: #ff8c00;
         }
     </style>
 
@@ -57,12 +78,25 @@
             new_smiles = smiles.replace(patt, '<em>$1</em>');
             document.getElementById("smiles_container").innerHTML = new_smiles;
         }
+
+        function cutSmiles() {
+            const smilesContainer = document.getElementById("smiles_container");
+            const smilesText = smilesContainer.innerText || smilesContainer.textContent; // 获取纯文本
+            navigator.clipboard.writeText(smilesText).then(() => {
+                smilesContainer.innerHTML = ""; // 清空SMILES框
+                alert("SMILES已剪切到剪贴板！"); // 提示用户
+            }).catch(err => {
+                alert("剪切失败，请手动复制: " + err);
+            });
+        }
     </script>
 </head>
 
 <body>
-    <div style="text-align: center;">
-        <strong>SMILES: </strong> <span id="smiles_container"></span>
+    <div id="smiles_wrapper">
+        <strong>SMILES: </strong>
+        <button id="cutButton" onclick="cutSmiles()" title="剪切SMILES到剪贴板">✂</button>
+        <span id="smiles_container"></span>
     </div>
     <form>
         <input type="checkbox" id="canonical" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>
