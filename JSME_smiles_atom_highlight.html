@@ -94,13 +94,13 @@
 
 <body>
     <div id="smiles_wrapper">
-        <strong>SMILES: </strong>
+        <strong style="color: #333333; font-size: 16px; font-weight: bold;">SMILES: </strong>
         <button id="cutButton" onclick="cutSmiles()" title="剪切SMILES到剪贴板">✂</button>
         <span id="smiles_container"></span>
     </div>
     <form>
         <input type="checkbox" id="canonical" onChange='jsmeApplet.options(this.checked ? "canonize" : "nocanonize");show_smiles({src: jsmeApplet})'>
-        <label for="canonical">Canonical SMILES</label>
+        <label for="canonical" style="color: #333333; font-size: 14px; font-weight: normal;">Canonical SMILES</label>
     </form>
     <div id="jsme_container"></div>
 </body>
